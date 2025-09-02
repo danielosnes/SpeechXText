@@ -1,0 +1,347 @@
+/* ===== iMessage layout: fixed input bar + scrollable chat above ===== */
+
+:root{
+/* tweak this if your input bar is taller/shorter */
+--input-height: 72px;
+--blue: #0a84ff;
+--blue-deep: #0066ff;
+--blue-light: #46a0ff;
+--gray-hi: #fafafc;
+--gray-mid: #e8e8ee;
+--gray-low: #cfd1d9;
+--shadow-strong: 0 8px 24px rgba(0,0,0,.12), 0 2px 6px rgba(0,0,0,.06);
+--shadow-soft: 0 2px 7px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.7);
+--inner-shine: inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* Full-height page and clean defaults */
+html, body {
+height: 100%;
+margin: 0;
+background: var(--bg);
+color: var(--text-dark);
+font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Establish a positioning context for the chat area */
+body {
+position: relative;
+}
+
+/* Scrollable chat window ABOVE the fixed input bar */
+#chat {
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+
+/* The bottom edge sits exactly above the input bar */
+bottom: var(--input-height);
+
+padding: 12px;
+overflow-y: auto;
+display: flex;
+flex-direction: column;
+gap: 8px;
+
+scroll-behavior: smooth;
+-webkit-overflow-scrolling: touch; /* iOS momentum scroll */
+
+background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(255,255,255,.7), transparent 70%),
+    radial-gradient(1200px 700px at 120% 110%, rgba(255,255,255,.7), transparent 70%),
+    repeating-linear-gradient(45deg, rgba(0,0,0,.015) 0 2px, transparent 2px 4px);
+backdrop-filter: saturate(1.05);
+}
+
+/* Fixed input bar pinned to bottom of the viewport */
+#chat-form {
+position: fixed;
+bottom: 0;
+left: 0;
+width: 100%;
+
+/* match --input-height */
+min-height: var(--input-height);
+box-sizing: border-box;
+
+display: flex;
+gap: 8px;
+align-items: center;
+
+padding: 10px env(safe-area-inset-right) 14px env(safe-area-inset-left);
+background: #fff;
+border-top: 1px solid #d7d7db;
+border: black;
+margin-bottom: 27px;
+}
+
+#chat-input {
+flex: 1;
+padding: 12px;
+font-size: 16px;
+background: #f2f2f7;
+border: 1px solid #e5e5ea;
+border-radius: 18px;
+outline: none;
+}
+
+#chat-form button {
+padding: 10px 14px;
+border-radius: 18px;
+border: none;
+background: var(--blue);
+color: #fff;
+font-weight: 600;
+cursor: pointer;
+}
+
+/* ===== Bubbles (iMessage style) ===== */
+
+.message {
+max-width: 76%;
+padding: 8px 12px;
+line-height: 1.25;
+font-size: 16px;
+border-radius: 18px;
+position: relative;
+word-wrap: break-word;
+white-space: pre-wrap;
+}
+
+.message.bot {
+align-self: flex-start;
+background: var(--bubble-gray);
+color: var(--text-dark);
+border-top-left-radius: 6px;
+}
+
+.message.user {
+align-self: flex-end;
+background: var(--bubble-blue);
+color: var(--text-light);
+border-top-right-radius: 6px;
+}
+
+/* Bubble tails */
+.message.bot::after,
+.message.user::after {
+content: "";
+position: absolute;
+bottom: 0;
+width: 12px;
+height: 12px;
+}
+.message.bot::after {
+left: -3px;
+background: radial-gradient(14px 14px at 0 100%, transparent 49%, var(--bubble-gray) 51%);
+}
+.message.user::after {
+right: -3px;
+background: radial-gradient(14px 14px at 100% 100%, transparent 49%, var(--bubble-blue) 51%);
+}
+
+/* Optional: small timestamp/meta under each bubble */
+.meta {
+font-size: 12px;
+opacity: 0.6;
+margin-top: 2px;
+user-select: none;
+}
+
+/* Optional: date separators */
+.separator {
+align-self: center;
+font-size: 12px;
+opacity: 0.75;
+padding: 4px 10px;
+background: rgba(0,0,0,0.06);
+border-radius: 12px;
+margin: 8px 0;
+}
+
+/* Optional: typing indicator */
+.typing {
+align-self: flex-start;
+background: var(--bubble-gray);
+color: var(--text-dark);
+border-radius: 18px;
+padding: 8px 12px;
+display: inline-flex;
+gap: 4px;
+}
+.dot {
+width: 6px; height: 6px; border-radius: 50%;
+background: #7a7a7a;
+animation: blink 1.2s infinite;
+}
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes blink {
+0%, 80%, 100% { opacity: .2; }
+40% { opacity: 1; }
+}
+
+/* Small-screen tweak: slightly taller input bar */
+@media (max-width: 480px) {
+:root { --input-height: 80px; }
+}
+
+button.speakSaveClear {
+    display: flexbox;
+    align-content: center;
+    text-align: center;
+    padding-right: 565px;
+    margin-top: 673px;
+    margin-left: 6px;
+    background-color: var(--blue);
+    border-radius: 18px;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+/* base bubble keeps your sizing */
+.message {
+position: relative;
+border-radius: 18px;
+border: 1px solid rgba(0,0,0,.06);
+}
+
+/* USER (right / blue, glossy enamel) */
+.message.user{
+background:
+    linear-gradient(to bottom, rgba(255,255,255,.35), rgba(255,255,255,0)) ,
+    linear-gradient(180deg, var(--blue-light), var(--blue));
+box-shadow:
+    0 1px 0 rgba(255,255,255,.35) inset,
+    0 -1px 0 rgba(0,0,0,.08) inset,
+    var(--shadow-soft);
+text-shadow: 0 1px 0 rgba(0,0,0,.15);
+border: 1px solid rgba(255,255,255,.18);
+}
+
+/* add a glossy highlight “lip” at top */
+.message.user::before{
+content:"";
+position:absolute; left:10px; right:10px; top:6px; height:8px;
+border-radius:8px;
+background: linear-gradient(to bottom, rgba(255,255,255,.75), rgba(255,255,255,0));
+pointer-events:none;
+}
+
+/* BOT (left / gray, cushioned card) */
+.message.bot{
+background:
+    linear-gradient(180deg, var(--gray-hi), var(--gray-mid));
+box-shadow:
+    var(--inner-shine),
+    0 -1px 0 rgba(255,255,255,.6) inset,
+    0 1px 0 rgba(0,0,0,.04) inset,
+    var(--shadow-soft);
+border: 1px solid rgba(0,0,0,.06);
+}
+
+/* Tails get a tiny bevel hint */
+.message.bot::after,
+.message.user::after{ filter: drop-shadow(0 1px 0 rgba(0,0,0,.05)); }
+
+.message.user,
+.message.bot{
+transition: transform .06s ease, box-shadow .2s ease;
+}
+.message.user:active,
+.message.bot:active{
+transform: scale(.995);
+}
+
+/* Slight lift on hover (desktop only) */
+@media (hover:hover){
+.message.user:hover,
+.message.bot:hover{
+box-shadow: 0 3px 10px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.7);
+}
+}
+
+#chat-form{
+background:
+    linear-gradient(to bottom, #fff, #f5f6f9);
+box-shadow:
+    0 -1px 0 rgba(255,255,255,.8) inset,
+    0 1px 0 rgba(0,0,0,.04) inset,
+    0 -6px 20px rgba(0,0,0,.06);
+}
+
+#chat-input{
+background: linear-gradient(180deg, #fdfdff, #f1f2f5);
+border: 1px solid rgba(0,0,0,.12);
+box-shadow:
+    0 1px 0 rgba(255,255,255,.8) inset,
+    0 -1px 0 rgba(0,0,0,.05) inset,
+    0 2px 6px rgba(0,0,0,.06);
+}
+
+/* glossy send button */
+#chat-form button{
+background:
+    linear-gradient(to bottom, #ffffff40, #00000020) ,
+    linear-gradient(180deg, var(--blue), var(--blue-deep));
+box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.12) inset,
+    var(--shadow-strong);
+border: 1px solid rgba(0,0,0,.12);
+transform: translateZ(0); /* crisper on Safari */
+transition: transform .06s ease, box-shadow .2s ease, filter .15s ease;
+}
+#chat-form button:hover{ filter: saturate(1.15) brightness(1.02); }
+#chat-form button:active{
+transform: translateY(1px) scale(.995);
+box-shadow:
+    0 .5px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.18) inset,
+    0 3px 8px rgba(0,0,0,.18);
+}
+#chat-form{
+background:
+    linear-gradient(to bottom, #fff, #f5f6f9);
+box-shadow:
+    0 -1px 0 rgba(255,255,255,.8) inset,
+    0 1px 0 rgba(0,0,0,.04) inset,
+    0 -6px 20px rgba(0,0,0,.06);
+}
+
+#chat-input{
+background: linear-gradient(180deg, #fdfdff, #f1f2f5);
+border: 1px solid rgba(0,0,0,.12);
+box-shadow:
+    0 1px 0 rgba(255,255,255,.8) inset,
+    0 -1px 0 rgba(0,0,0,.05) inset,
+    0 2px 6px rgba(0,0,0,.06);
+}
+
+/* glossy send button */
+#chat-form button{
+background:
+    linear-gradient(to bottom, #ffffff40, #00000020) ,
+    linear-gradient(180deg, var(--blue), var(--blue-deep));
+box-shadow:
+    0 1px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.12) inset,
+    var(--shadow-strong);
+border: 1px solid rgba(0,0,0,.12);
+transform: translateZ(0); /* crisper on Safari */
+transition: transform .06s ease, box-shadow .2s ease, filter .15s ease;
+}
+#chat-form button:hover{ filter: saturate(1.15) brightness(1.02); }
+#chat-form button:active{
+transform: translateY(1px) scale(.995);
+box-shadow:
+    0 .5px 0 rgba(255,255,255,.5) inset,
+    0 -1px 0 rgba(0,0,0,.18) inset,
+    0 3px 8px rgba(0,0,0,.18);
+}

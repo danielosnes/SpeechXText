@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech X Text</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Speech X Text</h1> 
+    <br />
+    <br />
+    <button class="speakSaveClear" id="speak">🎙️ Speak</button>
+    <button class="speakSaveClear" id="save">💾 Save</button>
+    <button class="speakSaveClear" id="clear">🗑️ Clear</button>
+    <br />
+
+
+    <div id="chat"></div>
+        <form id="chat-form">
+            <input id="chat-input" type="text" placeholder="iMessage…" autocomplete="off" />
+            <button type="submit">Send</button>
+        </form>
+    
+    
+    <br />
+    
+
+    <button id="saved">Saved Messages</button>
+    <br />
+    <br />
+    <ul id="list"></ul>
+
+    <!-- Socket.IO client (served by your server) -->
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- Your client code -->
+    <script src="/script.js"></script>
+</body>
+</html>

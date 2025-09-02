@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // --- imports ---
 const express = require('express');
 const http = require('http');
@@ -6,8 +8,9 @@ const dialogflow = require('@google-cloud/dialogflow');
 const { v4: uuidv4 } = require('uuid');
 const textToSpeech = require('@google-cloud/text-to-speech');
 
+
 // --- config ---
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const app = express();
 
 // --- middleware / static ---
@@ -78,9 +81,7 @@ const io = new Server(server);
 
 // --- Dialogflow setup ---
 const projectId = 'agent-smith-y9ld'; // from Dialogflow agent settings
-const sessionClient = new dialogflow.SessionsClient({
-    keyFilename: __dirname + '/dialogflow-key.json',
-});
+const sessionClient = new dialogflow.SessionsClient();
 
 // --- socket events ---
 io.on('connection', (socket) => {
@@ -112,9 +113,7 @@ socket.on('chat message', async (text) => {
 });
 
 // --- Google Cloud TTS setup ---
-const ttsClient = new textToSpeech.TextToSpeechClient({
-  keyFilename: __dirname + '/dialogflow-key.json', // same key file you already use
-});
+const ttsClient = new textToSpeech.TextToSpeechClient();
 
 app.post('/api/tts', async (req, res) => {
 try {

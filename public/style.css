@@ -193,7 +193,7 @@ button.speakSaveClear {
     text-align: center;
     padding-right: 565px;
     margin-top: 673px;
-    margin-left: 6px;
+    margin-left: 0px;
     background-color: var(--blue);
     border-radius: 18px;
     color: white;
